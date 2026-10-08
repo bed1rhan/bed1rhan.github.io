@@ -1,0 +1,6 @@
+import {ProjectsView,SkillsView} from "../../portfolio-sections";
+import ResumeView from "../../resume-view";
+import ContactView from "../../contact-view";
+const allowed=["about","resume","projects","skills","blog","contact"];
+export function generateStaticParams(){return ["en","tr"].flatMap(locale=>allowed.map(section=>({locale,section})))}
+export default async function Section({params}:{params:Promise<{locale:string,section:string}>}){const {locale,section}=await params;const tr=locale==="tr";const titles:Record<string,string>={about:tr?"Hakkımda":"About",resume:tr?"Hakkımda":"About",projects:tr?"Projeler":"Projects",skills:tr?"Yetkinlikler":"Skills",blog:tr?"Yazılar":"Blog",contact:tr?"İletişim":"Contact"};return <><main lang={locale} className="wrap section">{section!=="about"&&section!=="resume"&&section!=="projects"&&section!=="skills"&&section!=="contact"&&<><div className="eyebrow">{titles[section]}</div><h1>{titles[section]}</h1></>}{section==="projects"?<ProjectsView locale={locale}/>:section==="skills"?<SkillsView locale={locale}/>:section==="contact"?<ContactView locale={locale}/>:(section==="about"||section==="resume")?<ResumeView locale={locale}/>:<p>{tr?"Yazılar yakında eklenecek.":"Articles coming soon."}</p>}</main></>}
